@@ -8,7 +8,7 @@ using namespace KamataEngine;
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	
-	KamataEngine::Initialize(L"LC1A_28_フルカワ_ユウキ_タイトル");
+	KamataEngine::Initialize(L"LC1A_28_フルカワ_ユウキ_AL2_04_02");
 
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
