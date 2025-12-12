@@ -8,9 +8,11 @@ using namespace KamataEngine;
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	
-	KamataEngine::Initialize(L"LC1A_28_フルカワ_ユウキ_タイトル");
+	KamataEngine::Initialize(L"LC1A_28_フルカワ_ユウキ_AL2_04_03");
 
+	// インスタンス取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 
 	// ゲームシーンのインスタンス生成
 	GameScene* gameScene = new GameScene();
@@ -23,11 +25,21 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
+		//==========Update=========
+		imguiManager->Begin();
+
 		gameScene->Update();
 
+		imguiManager->End();
+
+		//==========Draw=========
 		dxCommon->PreDraw();
 
 		gameScene->Draw();
+
+		AxisIndicator::GetInstance()->Draw();
+
+		imguiManager->Draw();
 
 		dxCommon->PostDraw();
 	}
