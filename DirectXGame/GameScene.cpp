@@ -72,8 +72,9 @@ void GameScene::Draw() {
 	Model::PreDraw();
 
 	model_->Draw(worldTransform_, debugCamera_->GetCamera(), textureHandle_);
+	
+	PrimitiveDrawer::GetInstance()->DrawLine3d({0, 0, 0}, {0, 10, 0}, {1.0f, 0.0f, 0.0, 1.0f});
 
 	Model::PostDraw();
 
-	PrimitiveDrawer::GetInstance()->DrawLine3d({0, 0, 0}, {0, 10, 0}, {1.0f, 0.0f, 0.0, 1.0f});
 };
