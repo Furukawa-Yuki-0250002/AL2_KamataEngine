@@ -29,6 +29,22 @@ public:
 	const Camera& GetCamera() { return camera_; }
 
 	/// <summary>
+	/// ビュー行列の取得
+	/// </summary>
+	/// <returns>カメラのビュー行列</returns>
+	const Matrix4x4& GetViewMatrix() const {
+		return camera_.matView;
+	}
+
+	/// <summary>
+	/// 射影行列の取得
+	/// </summary>
+	/// <returns>カメラの射影行列</returns>
+	const Matrix4x4& GetProjectionMatrix() const {
+		return camera_.matProjection;
+	}
+
+	/// <summary>
 	/// プロジェクション行列計算用のメンバ設定関数群
 	/// </summary>
 	void SetFovAngleY(float value) { camera_.fovAngleY = value; }
