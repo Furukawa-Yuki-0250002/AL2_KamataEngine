@@ -1,5 +1,7 @@
 #include "Player.h"
 
+using namespace KamataEngine;
+
 Player::~Player() {};
 
 void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle, KamataEngine::Camera* camera) {
@@ -20,8 +22,8 @@ void Player::Initialize(KamataEngine::Model* model, uint32_t textureHandle, Kama
 }
 
 void Player::Update() {
-	// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
+	// ワールドトランスフォームの更新
+	WorldTransformUpdate(worldTransform_);
 }
 
 void Player::Draw() {

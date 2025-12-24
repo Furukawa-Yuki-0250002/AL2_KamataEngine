@@ -20,6 +20,7 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() {
 	// カメラの初期化
+	camera_.farZ = 800.0f;
 	camera_.Initialize();
 
 	PrimitiveDrawer::GetInstance()->SetCamera(&camera_);
@@ -27,17 +28,24 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
-	// プレイヤーのテクスチャ・モデル
+	//=================
+	// プレイヤー
+	//=================
+	// テクスチャ・モデル
 	playerTextureHandle_ = TextureManager::Load("images/mario.png");
 	playerModel_ = Model::Create();
+	// 生成
+	player_ = new Player();
+	// 初期化
+	player_->Initialize(playerModel_, playerTextureHandle_, &camera_);
 
-	// ブロックのテクスチャ・モデル
+	//=================
+	// ブロック
+	//=================
+	// テクスチャ・モデル
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	blockModel_ = Model::Create();
-
-	//=================
 	// ブロックの生成
-	//=================
 	// 要素数
 	const uint32_t kNumBlockVertical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
@@ -64,30 +72,23 @@ void GameScene::Initialize() {
 		}
 	}
 
-
-	// 自キャラの生成
-	player_ = new Player();
-	// 自キャラの初期化
-	player_->Initialize(playerModel_, playerTextureHandle_, &camera_);
+	//=================
+	// 天球
+	//=================
+	// モデル
+	skydomeModel_ = Model::CreateFromOBJ("skydome", true);
+	// 生成
+	skydome_ = std::make_unique<Skydome>();
+	// 初期化
+	skydome_->Initialize(skydomeModel_, &camera_);
 };
 
 void GameScene::Update() {
-	#ifdef _DEBUG
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		isDebugCametaActive_ = !isDebugCametaActive_;
-	}
-	#endif
-
 	// カメラの処理
-	if (isDebugCametaActive_) {
-		debugCamera_->Update();
-		camera_.matView = debugCamera_->GetViewMatrix();
-		camera_.matProjection = debugCamera_->GetProjectionMatrix();
-		camera_.TransferMatrix();
-
-	} else {
-		camera_.UpdateMatrix();
-	}
+	debugCamera_->Update();
+	camera_.matView = debugCamera_->GetViewMatrix();
+	camera_.matProjection = debugCamera_->GetProjectionMatrix();
+	camera_.TransferMatrix();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -95,19 +96,16 @@ void GameScene::Update() {
 				continue;
 			}
 			
-			// アフィン変換行列の作成
-			Matrix4x4 affineMatrix = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
-
-			// ワールド行列に代入
-			worldTransformBlock->matWorld_ = affineMatrix;
-
-			// 定数バッファへ転送
-			worldTransformBlock->TransferMatrix();
+			// ワールドトランスフォームの更新
+			WorldTransformUpdate(*worldTransformBlock);
 		}
 	}
 
 	// 自キャラの更新
 	player_->Update();
+
+	// 天球の更新
+	skydome_->Update();
 };
 
 void GameScene::Draw() {
@@ -125,7 +123,10 @@ void GameScene::Draw() {
 	}
 
 	// 自キャラの描画
-	//player_->Draw();
+	player_->Draw();
+
+	// 天球の描画
+	skydome_->Draw();
 
 	Model::PostDraw();
 };

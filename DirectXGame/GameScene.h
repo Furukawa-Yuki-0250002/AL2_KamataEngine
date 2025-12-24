@@ -2,7 +2,10 @@
 #include "KamataEngine.h"
 #include <stdint.h>
 #include <vector>
+#include <memory>
 #include "Player.h"
+#include "Skydome.h"
+#include "WorldTransformUpdater.h"
 
 //ゲームシーン
 class GameScene {
@@ -11,10 +14,13 @@ private:
 	KamataEngine::Camera camera_;
 
 	// デバッグカメラ
-	bool isDebugCametaActive_ = false;
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 
-	// プレイヤーのモデル・テクスチャ
+	//=================
+	// プレイヤー
+	//=================
+	Player* player_ = nullptr;
+	// モデル・テクスチャ
 	uint32_t playerTextureHandle_ = 0;
 	KamataEngine::Model* playerModel_ = nullptr;
 
@@ -23,8 +29,12 @@ private:
 	KamataEngine::Model* blockModel_ = nullptr;
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 
-	// 自キャラ
-	Player* player_ = nullptr;
+	//=================
+	// 天球
+	//=================
+	std::unique_ptr<Skydome> skydome_;
+	// モデル・テクスチャ
+	KamataEngine::Model* skydomeModel_ = nullptr;
 
 public:
 	// デストラクタ

@@ -1,5 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
+#include "WorldTransformUpdater.h"
 
 ///< summary>
 /// 自キャラ
