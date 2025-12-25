@@ -2,6 +2,34 @@
 
 using namespace KamataEngine;
 
+void GameScene::GenerateBlocks() {
+	// 要素数
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+
+	// 要素数を変更する
+	// 列数を設定(縦方向のブロック数)
+	worldTransformBlocks_.resize(numBlockHorizontal);
+	for (uint32_t i = 0; i < numBlockHorizontal; ++i) {
+		// 1列の要素数を設定(横方向のブロック数)
+		worldTransformBlocks_[i].resize(numBlockVirtical);
+	}
+
+	// ブロックの生成
+	for (uint32_t i = 0; i < numBlockVirtical; i++) {
+		for (uint32_t j = 0; j < numBlockHorizontal; j++) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[j][i] = worldTransform;
+				worldTransformBlocks_[j][i]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			}
+		}
+	}
+
+}
+
+
 GameScene::~GameScene() {
 	delete debugCamera_;
 
@@ -15,6 +43,8 @@ GameScene::~GameScene() {
 		}
 	}
 	worldTransformBlocks_.clear();
+
+	delete mapChipField_;
 };
 
 
@@ -40,37 +70,19 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModel_, playerTextureHandle_, &camera_);
 
 	//=================
+	// マップチップフィールド
+	//=================
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/AL2_05_04_mapData.csv");
+
+	GenerateBlocks();
+
+	//=================
 	// ブロック
 	//=================
 	// テクスチャ・モデル
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	blockModel_ = Model::Create();
-	// ブロックの生成
-	// 要素数
-	const uint32_t kNumBlockVertical = 10;
-	const uint32_t kNumBlockHorizontal = 20;
-	// ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
-	// 要素数を変更する
-	worldTransformBlocks_.resize(kNumBlockVertical);
-	for (uint32_t i = 0; i < kNumBlockVertical; ++i) {
-		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	}
-
-	// キューブの生成
-	for (uint32_t i = 0; i < kNumBlockVertical; i++) {
-		for (uint32_t j = 0; j < kNumBlockHorizontal; j++) {
-			if ((i + j) % 2 == 1) {
-				continue;
-			}
-
-			worldTransformBlocks_[i][j] = new WorldTransform();
-			worldTransformBlocks_[i][j]->Initialize();
-			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-		}
-	}
 
 	//=================
 	// 天球
