@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "WorldTransformUpdater.h"
+#include "MapChipField.h"
 
 //ゲームシーン
 class GameScene {
@@ -24,7 +25,10 @@ private:
 	uint32_t playerTextureHandle_ = 0;
 	KamataEngine::Model* playerModel_ = nullptr;
 
-	// ブロックのモデル・テクスチャ
+	//=================
+	// ブロック
+	//=================
+	// モデル・テクスチャ
 	uint32_t blockTextureHandle_ = 0;
 	KamataEngine::Model* blockModel_ = nullptr;
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
@@ -35,6 +39,13 @@ private:
 	std::unique_ptr<Skydome> skydome_;
 	// モデル・テクスチャ
 	KamataEngine::Model* skydomeModel_ = nullptr;
+
+	//=================
+	// マップチップフィールド
+	//=================
+	MapChipField* mapChipField_;
+
+	void GenerateBlocks();
 
 public:
 	// デストラクタ
