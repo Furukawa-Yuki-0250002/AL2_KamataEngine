@@ -59,17 +59,6 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	//=================
-	// プレイヤー
-	//=================
-	// テクスチャ・モデル
-	playerTextureHandle_ = TextureManager::Load("images/mario.png");
-	playerModel_ = Model::Create();
-	// 生成
-	player_ = new Player();
-	// 初期化
-	player_->Initialize(playerModel_, playerTextureHandle_, &camera_);
-
-	//=================
 	// マップチップフィールド
 	//=================
 	mapChipField_ = new MapChipField;
@@ -81,8 +70,7 @@ void GameScene::Initialize() {
 	// ブロック
 	//=================
 	// テクスチャ・モデル
-	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
-	blockModel_ = Model::Create();
+	blockModel_ = Model::CreateFromOBJ("cube");
 
 	//=================
 	// 天球
@@ -93,6 +81,18 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	// 初期化
 	skydome_->Initialize(skydomeModel_, &camera_);
+
+	//=================
+	// プレイヤー
+	//=================
+	// テクスチャ・モデル
+	playerModel_ = Model::CreateFromOBJ("player", true);
+	// 生成
+	player_ = new Player();
+	// 初期化
+	//座標取得
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
+	player_->Initialize(playerModel_, &camera_, playerPosition);
 };
 
 void GameScene::Update() {

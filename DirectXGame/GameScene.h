@@ -22,14 +22,12 @@ private:
 	//=================
 	Player* player_ = nullptr;
 	// モデル・テクスチャ
-	uint32_t playerTextureHandle_ = 0;
 	KamataEngine::Model* playerModel_ = nullptr;
 
 	//=================
 	// ブロック
 	//=================
 	// モデル・テクスチャ
-	uint32_t blockTextureHandle_ = 0;
 	KamataEngine::Model* blockModel_ = nullptr;
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 
