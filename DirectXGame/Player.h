@@ -67,4 +67,7 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; };
+	const KamataEngine::Vector3& GetVelocity() const { return velocity_; };
 };

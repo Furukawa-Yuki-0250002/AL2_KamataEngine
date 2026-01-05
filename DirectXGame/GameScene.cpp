@@ -93,6 +93,17 @@ void GameScene::Initialize() {
 	//座標取得
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1, 18);
 	player_->Initialize(playerModel_, &camera_, playerPosition);
+
+	//=================
+	// 追従カメラ
+	//=================
+	float halfWidth = 10.25f;
+	float halfHeight = 5.76f;
+	cameraController_ = new CameraController;
+	cameraController_->Initialize(&camera_);
+	cameraController_->SetTarget(player_);
+	cameraController_->SetMovableArea({0.0f + halfWidth, 99.0f - halfWidth, 0.0f + halfHeight, 19.0f - halfHeight});
+	cameraController_->Reset();
 };
 
 void GameScene::Update() {
@@ -102,6 +113,10 @@ void GameScene::Update() {
 	camera_.matProjection = debugCamera_->GetProjectionMatrix();
 	camera_.TransferMatrix();
 
+	// 追従カメラの更新
+	cameraController_->Update();
+
+	// ブロック
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock) {
