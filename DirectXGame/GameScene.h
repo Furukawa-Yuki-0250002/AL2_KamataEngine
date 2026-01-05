@@ -7,15 +7,22 @@
 #include "Skydome.h"
 #include "WorldTransformUpdater.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 
 //ゲームシーン
 class GameScene {
 private:
+	//float WIN_WIDTH_HALF = 640.0f;
+	//float WIN_HEIGHT_HALF = 320.0f;
+
 	// カメラ
 	KamataEngine::Camera camera_;
 
 	// デバッグカメラ
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+
+	// 追従カメラ
+	CameraController* cameraController_ = nullptr;
 
 	//=================
 	// プレイヤー
