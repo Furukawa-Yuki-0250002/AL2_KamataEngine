@@ -12,9 +12,6 @@
 //ゲームシーン
 class GameScene {
 private:
-	//float WIN_WIDTH_HALF = 640.0f;
-	//float WIN_HEIGHT_HALF = 320.0f;
-
 	// カメラ
 	KamataEngine::Camera camera_;
 
